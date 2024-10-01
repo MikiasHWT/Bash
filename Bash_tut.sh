@@ -22,6 +22,53 @@ head -n1 /etc/issue # Show distribution
  
 man command # Show manual for command
 
+##### echo vs printf
+read expression
+result=$(echo "scale=3; $expression" | bc -l)
+echo $result # The result is truncated NOT rounded
+ #VS
+read expression
+result=$(echo "$expression" | bc -l)
+printf "%.3f\n" "$result"
+
+
+
+# printf format [arguments...]
+
+    # format: A string that defines how the output should be formatted.
+    # arguments: The data or variables that will be formatted according to the format string.
+
+# Breakdown of printf "%.3f\n":
+
+    # %.3f: This is the format specifier for floating-point numbers.
+       # %: The start of a format specifier.
+       # .: The dot indicates precision for floating-point numbers.
+       # 3: The number after the dot (3) specifies the number of decimal places to include (in this case, 3).
+       # f: Stands for floating-point number.
+
+# Explanation of `printf`:
+# - `printf` is a powerful command in Bash for formatting and printing data.
+# - It is more flexible than `echo` because it allows us to specify how the output should look, including number of decimal places, padding, alignment, and more.
+# - `echo` simply prints whatever is passed to it, but `printf` gives control over formatting.
+
+# Comparison:
+# - `echo $result` would just print the result as-is, which might not be formatted to the desired precision.
+# - For example, if the result is 3.333333, `echo` will output it as-is.
+# - `printf`, on the other hand, allows us to specify the exact number of decimal places or other formatting needs.
+# - `printf "%.3f\n" $result` will format the result to 3 decimal places and ensure proper rounding.
+
+# Breakdown of `printf "%.3f\n"`:
+# - `%.3f`: This is a format specifier.
+#   - `%`: Starts the format specifier.
+#   - `.3`: Specifies to round and display exactly 3 decimal places.
+#   - `f`: Indicates that the value is a floating-point number.
+# - `\n`: This adds a newline after printing the result, which `printf` doesn't add by default (unlike `echo`).
+# 
+# Example:
+# If the result is `3.333333333`, `printf "%.3f\n"` will output `3.333` (rounded to 3 decimal places).
+# If the result is `2.999999999`, it will be rounded to `3.000`.
+
+
 
 mount # show mounted filesystems
 
@@ -76,6 +123,9 @@ inxi -S
 inxi -Sv
 inxi -w # Weather
 inxi -W rome,italy # specify location
+
+# Check computer storage allocations
+ncdu
  
 $USER # Standard variable
 env # to view standard/environmental variables
@@ -228,6 +278,30 @@ else
     echo "$package failed to install" >> package_install_results.log
 fi
 #############
+
+# Summary of Bash Constructs and Their Use Cases:
+
+# 1. (( )) - Arithmetic Evaluation
+#    Purpose: Perform arithmetic operations and comparisons.
+#    Use Case: When doing arithmetic (e.g., n=5; (( n > 3 ))).
+
+# 2. () - Subshell Execution
+#    Purpose: Isolate commands in a subshell.
+#    Use Case: When you want to run commands in isolation or without affecting the parent shell environment (e.g., (cd /tmp && touch file)).
+
+# 3. [[ ]] - Advanced Conditional Testing
+#    Purpose: Perform advanced string comparisons, logical operations, and pattern matching.
+#    Use Case: When doing complex string tests, pattern matching, or logical operations (e.g., [[ $file == *.txt ]]).
+
+# 4. [] - Basic Conditional Testing
+#    Purpose: Perform simple file tests and integer comparisons.
+#    Use Case: For basic conditional checks like file existence or integer comparison (e.g., [ -f "$file" ] or [ $n -eq 5 ]).
+
+
+
+
+
+
 
 # While loops
 myvar=1
